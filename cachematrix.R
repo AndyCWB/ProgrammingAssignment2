@@ -1,7 +1,12 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions define a matrix which caches it's own inverse
+## Written for the Coursera R programming course.
+## Two functions: 
+##      makeCacheMatrix created a cached matrix from a normal matrix
+##      cacheSolve - returns the inverse, computed using solve() and cached for subsequent calls
 
-## Write a short comment describing this function
+## makeCacheMatrix(x) creates a cached Matrix from a normal matrix
+## E.g., c = rbind(c(1, -1/4), c(-1/4, 1))
+##       m = makeCacheMatrix(c)
 
 makeCacheMatrix <- function(x = matrix()) {
   inv <- NULL
@@ -16,38 +21,17 @@ makeCacheMatrix <- function(x = matrix()) {
        getinv = getinv, setinv=setinv)
 }
 
-
-makeVector <- function(x = numeric()) {
-  m <- NULL
-  set <- function(y) {
-    x <<- y
-    m <<- NULL
-  }
-  get <- function() x
-  setmean <- function(mean) m <<- mean
-  getmean <- function() m
-  list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
-}
-
-c=rbind(c(1, -1/4), c(-1/4, 1))
-m = makeCacheMatrix(c)
-
-## m$getinv()
-
-
 ## Compute the inverse and save it in the cache for next time
+## cacheSolve(m) 
 
 cacheSolve <- function(x, ...) {
-  ## Return a matrix that is the inverse of 'x'
   inv = x$getinv()
   if (is.null(inv)) { 
     message("Computing inverse")
     m <-x$get()
-    inv <- solve(m) 
-    m$setinv(inv)
-    inv
+    inv <- solve(m)    # this is the actual inverse computation 
+    x$setinv(inv)
+    return(inv)
   }
   else { 
     message ("returning cached value")
